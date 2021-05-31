@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!-- aviutl_browser 用コンテンツスクリプト「マイクラスキン」 $VERSION$ ( $GITHASH$ ) by oov -->
+<html lang="ja">
+<meta charset="utf-8">
+<title>Minecraft Skin Viewer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<style>
+* {
+	padding: 0;
+	margin: 0;
+}
+canvas {
+	display: block;
+}
+</style>
+<body>
+<div id="container"></div>
+<script src="./skinview3d.bundle.js"></script>
+<script type="module">
+class Viewer {
+	constructor() {
+		this.v = new skinview3d.SkinViewer({
+			width: window.innerWidth,
+			height: window.innerHeight,
+			renderPaused: true,
+		});
+		this.canvas = this.v.canvas;
+		this.skinImageHash = 'a';
+	}
+	async render(skinImageHash, pose) {
+		if (this.v.width != window.innerWidth || this.v.height != window.innerHeight) {
+			this.v.setSize(window.innerWidth, window.innerHeight);
+		}
+		if (this.skinImageHash !== skinImageHash) {
+			this.skinImageHash = skinImageHash;
+			await this.v.loadSkin(skinImageHash ? "/userfile" : "/dummy.png");
+		}
+
+		const player = this.v.playerObject;
+		const skin = player.skin;
+		skin.leftArm.rotation.x = pose[0];
+		skin.leftArm.rotation.z = pose[1];
+		skin.rightArm.rotation.x = pose[2];
+		skin.rightArm.rotation.z = pose[3];
+		skin.leftLeg.rotation.x = pose[4];
+		skin.leftLeg.rotation.z = pose[5];
+		skin.rightLeg.rotation.x = pose[6];
+		skin.rightLeg.rotation.z = pose[7];
+		skin.head.rotation.x = pose[8];
+		skin.head.rotation.y = pose[9];
+		skin.head.rotation.z = pose[10];
+		player.position.x = pose[11];
+		player.position.y = pose[12];
+		player.position.z = pose[13];
+		player.rotation.x = pose[14];
+		player.rotation.y = pose[15];
+		player.rotation.z = pose[16];
+
+		this.v.render();
+	}
+}
+
+const viewers = new Map();
+const container = document.querySelector('#container');
+let lastTabID = null;
+AviUtlBrowser.registerRenderer(async params => {
+	const pose = params.param.split(" ").map(v => parseFloat(v));
+  const tabid = pose.shift();
+	if (!viewers.has(tabid)) {
+		viewers.set(tabid, new Viewer());
+	}
+	const v = viewers.get(tabid);
+	await v.render(params.userfile, pose);
+	if (lastTabID !== tabid) {
+		container.replaceChildren(v.canvas);
+		lastTabID = tabid;
+	}
+	return '';
+});
+</script>
+</body>
+</html>

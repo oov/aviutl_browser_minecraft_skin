@@ -1,0 +1,44 @@
+-- aviutl_browser 用コンテンツスクリプト「マイクラスキン」 $VERSION$ ( $GITHASH$ ) by oov
+@腕
+--track0:左腕X,-10000,10000,0,0.01
+--track1:左腕Z,-10000,10000,0,0.01
+--track2:右腕X,-10000,10000,0,0.01
+--track3:右腕Z,-10000,10000,0,0.01
+lax = math.rad(obj.track0)
+laz = math.rad(obj.track1)
+rax = math.rad(obj.track2)
+raz = math.rad(obj.track3)
+
+@足
+--track0:左足X,-10000,10000,0,0.01
+--track1:左足Z,-10000,10000,0,0.01
+--track2:右足X,-10000,10000,0,0.01
+--track3:右足Z,-10000,10000,0,0.01
+llx = math.rad(obj.track0)
+llz = math.rad(obj.track1)
+rlx = math.rad(obj.track2)
+rlz = math.rad(obj.track3)
+
+@全体
+--track0:位置X,-10000,10000,0,0.01
+--track1:位置Y,-10000,10000,0,0.01
+--track2:位置Z,-10000,10000,0,0.01
+px = obj.track0
+py = obj.track1
+pz = obj.track2
+
+@描画
+--track0:向きX,-10000,10000,0,0.01
+--track1:向きY,-10000,10000,0,0.01
+--track2:向きZ,-10000,10000,0,0.01
+--check0:DevTools,0
+--file:
+tonumber(nil)
+obj.setoption("drawtarget", "tempbuffer", obj.screen_w, obj.screen_h)
+obj.load("tempbuffer")
+require("browser").execute({
+  abc = "マイクラスキン.abc",
+  userfile = file,
+  param = string.format("%d %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f", obj.layer, lax, laz, rax, raz, llx, llz, rlx, rlz, hx, hy, hz, px, py, pz, rx + math.rad(obj.track0), ry + math.rad(obj.track1), rz + math.rad(obj.track2)),
+  dev = obj.check0,
+});

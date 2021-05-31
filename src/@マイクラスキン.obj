@@ -1,0 +1,13 @@
+-- aviutl_browser 用コンテンツスクリプト「マイクラスキン」 $VERSION$ ( $GITHASH$ ) by oov
+@頭
+--track0:頭X,-10000,10000,0,0.01
+--track1:頭Y,-10000,10000,0,0.01
+--track2:頭Z,-10000,10000,0,0.01
+obj.setoption("drawtarget", "tempbuffer", 1, 1)
+obj.load("tempbuffer")
+hx = math.rad(obj.track0)
+hy = math.rad(obj.track1)
+hz = math.rad(obj.track2)
+rx = 0
+ry = 0
+rz = 0
